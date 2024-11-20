@@ -10,3 +10,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
   });
   
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (
+        changeInfo.status === "complete" &&
+        tab.url &&
+        tab.url.includes("linkedin.com/in/")
+    ) {
+        chrome.action.openPopup();
+    }
+});

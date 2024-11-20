@@ -8,20 +8,22 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    width: 300px;
+    justify-content: flex-start; /* Align content to the top */
+    min-height: 100vh;
+    width: 300px; /* Fixed width for popup */
     text-align: center;
     box-sizing: border-box;
+    overflow: hidden; /* Prevent unwanted overflow */
 }
 
 /* Heading Styles */
 h1 {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
     font-weight: 600;
     text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     animation: fadeIn 1.5s ease-out;
+    text-align: center;
 }
 
 /* Button Styles */
@@ -36,6 +38,7 @@ button {
     box-shadow: 0 8px 15px rgba(255, 117, 140, 0.2);
     cursor: pointer;
     transition: all 0.3s ease;
+    margin: 1rem 0;
 }
 
 button:hover {
@@ -50,16 +53,33 @@ button:active {
 
 /* Output Styles */
 #output {
-    margin-top: 1.5rem;
+    margin: 1rem 0;
     font-size: 0.9rem;
-    line-height: 1.6;
+    line-height: 1.5;
     background: rgba(255, 255, 255, 0.1);
     padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     word-wrap: break-word;
-    max-width: 90%;
+    max-width: 90%; /* Fit content within the popup */
+    max-height: 200px; /* Restrict height for smaller popups */
+    overflow-y: auto; /* Enable scrolling for longer content */
+    text-align: left; /* Improve readability */
     animation: slideUp 1s ease-out;
+}
+
+/* Scrollbar Styles for Output */
+#output::-webkit-scrollbar {
+    width: 6px;
+}
+
+#output::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+#output::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 /* Animations */
@@ -85,18 +105,16 @@ button:active {
     }
 }
 
-/* Scrollbar Styles (Optional) */
-body::-webkit-scrollbar {
-    width: 6px;
-}
-
-body::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
+/* Popup Container Styles */
+.popup-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-height: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 /* Responsive Design */
@@ -111,6 +129,7 @@ body::-webkit-scrollbar-thumb:hover {
     }
 
     #output {
-        font-size: 0.8rem;
+        max-height: 150px; /* Adjust for smaller screens */
+        padding: 10px;
     }
 }

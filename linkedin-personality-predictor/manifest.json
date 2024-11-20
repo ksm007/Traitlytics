@@ -3,8 +3,9 @@
     "name": "LinkedIn Personality Predictor",
     "version": "1.0",
     "description": "Predict personality traits based on LinkedIn profiles.",
-    "permissions": ["activeTab", "scripting", "tabs"],
-    "host_permissions": ["http://127.0.0.1:5000/*"],
+    "permissions": ["activeTab", "storage", "scripting", "tabs"],
+    "host_permissions": ["http://127.0.0.1:5000/*","https://www.linkedin.com/in/*"],
+    
     "background": {
       "service_worker": "background.js"
     },
