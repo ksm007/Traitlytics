@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Traitlytic",
+    "version": "1.0",
+    "description": "Predict personality traits from LinkedIn profiles.",
+    "permissions": ["activeTab", "storage"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon16.png",
+            "48": "icon48.png"
+        }
+    },
+    "host_permissions": ["<all_urls>"],
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png"
+    }
+}
