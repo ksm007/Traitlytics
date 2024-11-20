@@ -1,0 +1,9 @@
+flask
+cloudscraper
+beautifulsoup4
+pyppeteer
+torch==1.12.0
+sentence-transformers==2.2.2
+langchain
+transformers
+joblib
