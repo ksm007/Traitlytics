@@ -12,17 +12,78 @@ logging.basicConfig(level=logging.INFO)
 
 # List of proxies and user agents for rotation
 proxies = [
-    "http://102.134.130.41:80", "http://44.195.247.145:80",
-    "http://54.233.119.172:3128", "http://3.122.84.99:3128",'http://133.18.234.13'
-    # Additional proxies as needed
+    "http://102.134.130.41:80",
+    "http://44.195.247.145:80",
+    "http://54.233.119.172:3128",
+    "http://3.122.84.99:3128",
+    "http://133.18.234.13",
+    "http://172.94.32.48:80",    # Singapore
+    "http://84.32.230.73:80",    # Lithuania
+    "http://91.148.134.48:80",   # Colombia
+    "http://20.233.44.207:80",   # United Arab Emirates
+    "http://208.104.211.63:80",  # United States
+    "http://178.16.130.81:80",   # France
+    "http://13.80.134.180:80",   # Netherlands
+    "http://51.75.33.162:80",    # Poland
+    "http://64.92.82.58:8080",   # United States
+    "http://160.86.242.23:8080", # Japan
+    "http://4.157.219.21:80",    # United States
+    "http://43.134.68.153:3128", # Singapore
+    "http://47.242.47.64:8888",  # Hong Kong
+    "http://200.174.198.86:8888",# Brazil
+    "http://5.252.22.45:80",     # Germany
+    "http://157.254.53.50:80",   # Hong Kong
+    "http://46.47.197.210:3128", # Russia
+    "http://195.114.209.50:80",  # Spain
+    "http://159.203.61.169:3128",# Canada
+    "http://43.133.59.220:3128", # Singapore
+    "http://5.42.87.139:8080"    # Sweden
 ]
 
+
 user_agents = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/91.0.4472.114 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0"
-    # Additional user agents as needed
+    # Chrome on Windows
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36",
+
+    # Chrome on macOS
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36",
+
+    # Firefox on Windows
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0",
+
+    # Firefox on macOS
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:92.0) Gecko/20100101 Firefox/92.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 11.5; rv:91.0) Gecko/20100101 Firefox/91.0",
+
+    # Safari on macOS
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15",
+
+    # Edge on Windows
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.67",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.961.52 Safari/537.36 Edg/93.0.961.52",
+
+    # Mobile Safari on iOS
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
+
+    # Chrome on Android
+    "Mozilla/5.0 (Linux; Android 11; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.82 Mobile Safari/537.36",
+    "Mozilla/5.0 (Linux; Android 10; Pixel 4 XL) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Mobile Safari/537.36",
+
+    # Opera on Windows
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 OPR/77.0.4054.254",
+
+    # Generic crawler disguises
+    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+    "Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)"
 ]
+
 
 def scrape_website(website_url, max_retries=3):
     """Scrape the website content using Cloudscraper or fallback to Pyppeteer."""
@@ -66,7 +127,7 @@ async def scrape_with_puppeteer(website_url, proxy, user_agent, timeout=30):
     browser = None
     try:
         browser = await launch(
-            headless=True,
+            headless=False,
             args=[f'--proxy-server={proxy}'],
             handleSIGINT=False,
             handleSIGTERM=False,

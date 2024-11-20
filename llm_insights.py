@@ -5,41 +5,21 @@ from joblib import Memory
 
 memory = Memory("/tmp/joblib_cache", verbose=0)
 
-# insights_template = ('''
-# You are an insightful personality analyst skilled in evaluating LinkedIn profiles. Review the provided profile data, focusing on keywords, role descriptions, and language use, to predict the individual's personality type, similar to the DISC framework.
-
-# Profile Data:
-# {data}
-
-# Please follow these general guidelines:
-# 1. **Profile Summary**: Provide a concise overview that highlights key personality traits based on the profile's keywords and tone of communication.
-
-# 2. **Identify DISC Personality Type**: Predict the personality type (D - Dominance, I - Influence, S - Steadiness, C - Conscientiousness) based on observed traits. For example:
-#    - **D (Dominance)**: Results-oriented, decisive, direct, and takes charge.
-#    - **I (Influence)**: People-focused, persuasive, enthusiastic, and social.
-#    - **S (Steadiness)**: Dependable, calm, supportive, and reliable.
-#    - **C (Conscientiousness)**: Detail-oriented, analytical, cautious, and thorough.
-
-# 3. **Keywords and Indicators**: List specific keywords or phrases in the profile that led to the personality prediction.
-
-# 4. **Relevant Strengths and Potential Areas for Development**: Based on the personality prediction, outline strengths relevant to various professional contexts (e.g., team leadership, client relations, technical roles) and areas where the individual might benefit from development.
-
-# 5. **Generalized Recommendations**: Offer advice on potential career paths, roles, or work environments that align with the predicted personality type.
-
-# 6. **Cross-Context Adaptability**: Present findings in a way that could be useful across multiple industries, making insights universally relevant.
-# ''')
-
 insights_template = (
+
     "You are an insightful personality analyst skilled in evaluating LinkedIn profiles. "
     "Review the provided profile data, focusing on keywords, role descriptions, and language use, to predict the individual's personality type, similar to the DISC framework. "
-    "\n\nProfile Data:\n{data}"
+    "\n\nProfile Data:\n{dom_content}"
     "\n\nPlease follow these general guidelines:"
     "\n1. **Profile Summary**: Provide a concise overview that highlights key personality traits based on the profile's keywords and tone of communication."
     "\n2. **Identify DISC Personality Type**: Predict the personality type (D - Dominance, I - Influence, S - Steadiness, C - Conscientiousness) based on observed traits."
     "\n3. **Keywords and Indicators**: List specific keywords or phrases in the profile that led to the personality prediction."
-    "\n4. **Relevant Strengths and Potential Areas for Development**: Based on the personality prediction, outline strengths and areas for improvement."
-    "\n5. **Generalized Recommendations**: Suggest potential career paths or roles that align with the predicted personality type."
+    "\n4. **Do's and Don'ts for Interviews:**"
+    "\n    - **Do:** Provide two actionable suggestions for effectively collaborating with or working alongside this individual."
+    "\n    - **Don't:** Highlight two potential pitfalls to avoid when interacting or interviewing with this person."
 )
+
+
 
 model = OllamaLLM(model="llama3.1:latest")
 
@@ -66,18 +46,14 @@ def compute_reward(response_text, user_feedback=None):
     return reward
 
 @memory.cache
-def generate_llm_insights(parsed_results, user_feedback=None):
-    # Ensure parsed_results is properly formatted
-    if isinstance(parsed_results, dict):
-        # Convert dict to a plain text representation
-        data_lines = []
-        for key, value in parsed_results.items():
-            data_lines.append(f"{key}: {value}")
-        data_representation = '\n'.join(data_lines)
-    elif isinstance(parsed_results, str):
-        data_representation = parsed_results
-    else:
-        raise ValueError("Unsupported data type in parsed_results.")
+@memory.cache
+def generate_llm_insights(dom_content, user_feedback=None):
+    """
+    Generate personality insights directly from DOM content.
+    """
+    # Check if DOM content is empty
+    if not dom_content or not isinstance(dom_content, str) or dom_content.strip() == "":
+        return "Data not found. Please ensure the LinkedIn profile URL is valid and accessible."
 
     # Initialize variables for RL loop
     max_iterations = 3  # Number of iterations for refinement
@@ -91,7 +67,7 @@ def generate_llm_insights(parsed_results, user_feedback=None):
 
         # Generate the insights by invoking the chain with the input data
         response = chain.invoke({
-            "data": data_representation,
+            "dom_content": dom_content,
         })
 
         # Compute the reward

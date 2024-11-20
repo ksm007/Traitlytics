@@ -86,26 +86,21 @@ if st.button("Scrape LinkedIn Profile"):
 #     st.write(st.session_state.generated_insights)
 
 # Check for the presence of required keys in the parsed results
+# Generate insights directly from DOM content
+
 if st.session_state.dom_content:
-    st.write("Parsing the profile data...")
-    parsed_result = parse_with_ollama(st.session_state.dom_content)
-    
-    # Ensure required keys are present in the parsed result
-    required_keys = ['name', 'professional_experiences']
-    for key in required_keys:
-        if key not in parsed_result:
-            parsed_result[key] = "N/A"  # Provide a default value
-
-    st.session_state.parsed_result = parsed_result
-
-    st.write("Generating personality insights...")
+    st.write("Generating personality insights directly from DOM content...")
     try:
-        insights = generate_llm_insights(st.session_state.parsed_result)
+        insights = generate_llm_insights(st.session_state.dom_content)
         st.session_state.generated_insights = insights
-        st.write("### Personality Insights:")
-        st.write(st.session_state.generated_insights)
+        if insights == "Data not found. Please ensure the LinkedIn profile URL is valid and accessible.":
+            st.error(insights)
+        else:
+            st.write("### Personality Insights:")
+            st.write(st.session_state.generated_insights)
     except Exception as e:
         st.error(f"Error generating insights: {str(e)}")
+
 
     # Add thumbs up/down buttons for feedback
     st.write("### Was this insight helpful?")
@@ -122,3 +117,4 @@ if st.session_state.dom_content:
     # Display user feedback if provided
     if st.session_state.user_feedback:
         st.write(f"Your feedback: {st.session_state.user_feedback}")
+

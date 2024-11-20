@@ -5,41 +5,44 @@ from joblib import Memory
 
 memory = Memory("/tmp/joblib_cache", verbose=0)
 
-# insights_template = ('''
-# You are an insightful personality analyst skilled in evaluating LinkedIn profiles. Review the provided profile data, focusing on keywords, role descriptions, and language use, to predict the individual's personality type, similar to the DISC framework.
 
-# Profile Data:
-# {data}
-
-# Please follow these general guidelines:
-# 1. **Profile Summary**: Provide a concise overview that highlights key personality traits based on the profile's keywords and tone of communication.
-
-# 2. **Identify DISC Personality Type**: Predict the personality type (D - Dominance, I - Influence, S - Steadiness, C - Conscientiousness) based on observed traits. For example:
-#    - **D (Dominance)**: Results-oriented, decisive, direct, and takes charge.
-#    - **I (Influence)**: People-focused, persuasive, enthusiastic, and social.
-#    - **S (Steadiness)**: Dependable, calm, supportive, and reliable.
-#    - **C (Conscientiousness)**: Detail-oriented, analytical, cautious, and thorough.
-
-# 3. **Keywords and Indicators**: List specific keywords or phrases in the profile that led to the personality prediction.
-
-# 4. **Relevant Strengths and Potential Areas for Development**: Based on the personality prediction, outline strengths relevant to various professional contexts (e.g., team leadership, client relations, technical roles) and areas where the individual might benefit from development.
-
-# 5. **Generalized Recommendations**: Offer advice on potential career paths, roles, or work environments that align with the predicted personality type.
-
-# 6. **Cross-Context Adaptability**: Present findings in a way that could be useful across multiple industries, making insights universally relevant.
 # ''')
+# insights_template = (
+#     "You are an insightful personality analyst skilled in evaluating LinkedIn profiles. "
+#     "Review the provided profile data and generate actionable insights using the DISC personality framework. "
+#     "Structure your response as follows:"
+#     "\n\nProfile Data:\n{data}"
+#     "\n\nOutput Format:"
+#     "\n**Personality Type**: Provide the primary DISC personality type (e.g., Analyzer (C)) and a one-line summary."
+#     "\n**Personality Description**: Give a detailed explanation of the personality type, highlighting work habits, strengths, and behaviors."
+#     "\n**Do's and Don'ts for Interaction**:"
+#     "\n    - **Do:** Provide two specific actions or approaches to interact effectively with this individual."
+#     "\n    - **Don't:** Provide two specific actions or behaviors to avoid during interactions."
+# )
 
 insights_template = (
-    "You are an insightful personality analyst skilled in evaluating LinkedIn profiles. "
-    "Review the provided profile data, focusing on keywords, role descriptions, and language use, to predict the individual's personality type, similar to the DISC framework. "
-    "\n\nProfile Data:\n{data}"
-    "\n\nPlease follow these general guidelines:"
-    "\n1. **Profile Summary**: Provide a concise overview that highlights key personality traits based on the profile's keywords and tone of communication."
-    "\n2. **Identify DISC Personality Type**: Predict the personality type (D - Dominance, I - Influence, S - Steadiness, C - Conscientiousness) based on observed traits."
-    "\n3. **Keywords and Indicators**: List specific keywords or phrases in the profile that led to the personality prediction."
-    "\n4. **Relevant Strengths and Potential Areas for Development**: Based on the personality prediction, outline strengths and areas for improvement."
-    "\n5. **Generalized Recommendations**: Suggest potential career paths or roles that align with the predicted personality type."
+    "You are a skilled personality analyst using the DISC framework to evaluate professional profiles. "
+    "Analyze the provided profile data: {data} and identify the individual's DISC personality type (D - Dominance, I - Influence, S - Steadiness, C - Conscientiousness). "
+    "Provide actionable insights for interacting with this individual in professional settings. Format your response as follows:"
+
+    "\n\n**Profile Summary**:"
+    "\nProvide a concise overview of the individual's personality based on their professional experiences, education, and skills."
+
+    "\n\n**DISC Personality Type**:"
+    "\nPredict the primary DISC personality type. Include one type only (D, I, S, or C) and explain why this type applies based on the profile data."
+
+    "\n\n**Key Traits**:"
+    "\nList three to five key traits that define this individual's behavior or work style."
+
+    "\n\n**Personality Diagram**:"
+    "\nDescribe their DISC type visually (e.g., Analyzer (C), Promoter (I), Stabilizer (S), Leader (D))."
+
+    "\n\n**Do's and Don'ts for Interaction**:"
+    "\n- **Do:** Provide two actionable suggestions for effectively working with this individual."
+    "\n- **Don't:** Provide two potential pitfalls to avoid when interacting with them."
+
 )
+
 
 model = OllamaLLM(model="llama3.1:latest")
 
