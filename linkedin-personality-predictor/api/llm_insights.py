@@ -28,10 +28,15 @@ insights_template = (
 )
 
 model = OllamaLLM(model="llama3.1:latest")
-# @memory.cache
-def generate_llm_insights(raw_data):
-    if not raw_data:
+@memory.cache
+def generate_llm_insights(profile_data):
+    if not profile_data:
         return "No data provided for generating insights."
+
+    # Convert profile_data dictionary into a readable string for the LLM
+    profile_data_str = "\n".join(
+        f"{key.capitalize()}: {value}" for key, value in profile_data.items() if value
+    )
 
     # Create the prompt template
     prompt_template = ChatPromptTemplate.from_template(insights_template)
@@ -39,23 +44,10 @@ def generate_llm_insights(raw_data):
 
     # Generate the insights by invoking the chain with the input data
     response = chain.invoke({
-        "data": raw_data,
+        "data": profile_data_str,  
     })
 
-    print("Generated insights for the provided data")
+    print("Generated insights for the provided profile data")
     return response
 
-
-# @memory.cache
-# def generate_llm_insights(profile_data):
-#     if not profile_data:
-#         return "No profile data provided for generating insights."
-
-#     # Modify the prompt to use structured profile data
-#     response = chain.invoke({
-#         "data": profile_data,
-#     })
-
-#     print("Generated insights for the provided data")
-#     return response
 
