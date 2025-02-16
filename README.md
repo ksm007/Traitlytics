@@ -1,4 +1,4 @@
-# Traitlytic
+# Traitlytics
 
 Ever wondered what kind of personality your hiring manager has? Traitlytic provides deep personality insights by analyzing their LinkedIn profiles, helping you tailor your communication and approach during interviews. It is an AI-powered personality prediction tool that generates DISC personality insights using Meta LLaMA 3.1 7B via Ollama and automated web scraping techniques to deliver personalized and data-driven assessments.
 
