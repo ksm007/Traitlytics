@@ -48,15 +48,19 @@ document.getElementById("predict-button").addEventListener("click", async () => 
 function displayInsights(data) {
     document.getElementById("summary").innerText = data.Profile_Summary || "Profile Summary not available.";
 
+
+
     const outputHtml = `
         <h2>DISC Personality Type</h2>
         <p>${data.DISC_Personality_Type || "Not available"}</p>
+          <h2>Personality Traits</h2>
+        <p>${data.Personality_Diagram || "Not available"}</p>
+
         <h2>Key Traits</h2>
         <ul>
             ${data.Key_Traits ? data.Key_Traits.map(trait => `<li>${trait}</li>`).join('') : "<li>Not available</li>"}
         </ul>
-        <h2>Personality Diagram</h2>
-        <p>${data.Personality_Diagram || "Not available"}</p>
+      
         <h2>Do's</h2>
         <ul>
             ${data.Dos ? data.Dos.map(doItem => `<li>${doItem}</li>`).join('') : "<li>Not available</li>"}

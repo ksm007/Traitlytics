@@ -20,8 +20,9 @@ def scrape():
         print("Data Extraction complete")
         print(f"Profile Data: {profile_data}")
 
-        if not profile_data:
-            return jsonify({"error": "Failed to scrape content from the provided URL."}), 400
+        if not profile_data or not any(profile_data.values()):
+            return jsonify({"error": "Failed to scrape content or insufficient data from the provided URL."}), 400
+
 
         # Step 2: Generate LLM insights
         insights = generate_llm_insights(profile_data)
@@ -45,6 +46,7 @@ def clean_markdown(text):
     """
     cleaned_text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)  # Remove bold formatting
     cleaned_text = re.sub(r"\n{2,}", "\n", cleaned_text).strip()  # Remove extra newlines
+    cleaned_text = re.sub(r"\s{2,}", " ", cleaned_text)  # Remove extra spaces
     return cleaned_text
 
 

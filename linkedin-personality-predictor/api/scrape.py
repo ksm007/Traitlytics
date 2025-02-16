@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-SESSION_ID = 'AQEDATD5GXwE5GoFAAABk4pptCIAAAGT1lWhQU0AJIkW8uW6U2Pl4NfzgKEXPvtDBZsFqd28655XQfqvVXYR4qM4moHGWNzPZIqxVmsW6hRRUa623DdQqEmUN37ahRwa-bCDrLrGhwndEpdWpVvJyZHw'
+SESSION_ID = 'AQEDATD5GXwCQ8ZyAAABlPwXAzoAAAGVICOHOlYAkt7Cag86Eefza3Uv8VCyjHgIM9RuwWN69piU67pYuxS2z1ZIkpmCuW_bIveJ7snCSJVvNs2IJXZoqeaONlViMAJ2acQJHu3ugweLcIeqLpl91Ig4'
 
 def scrape_website(url):
     driver = get_driver()
@@ -97,10 +97,12 @@ def extract_profile_data(driver, url):
     if name:
         profile_data['name'] = name.get_text(strip=True)
 
+    # Headline
     headline = soup.find('div', {'class': 'text-body-medium break-words'})
     if headline:
         profile_data['headline'] = headline.get_text(strip=True)
 
+    # About-us section
     about_section = soup.find('div', {'class': 'display-flex ph5 pv3'})
     if about_section:
         profile_data['about'] = about_section.get_text(strip=True)
@@ -108,7 +110,7 @@ def extract_profile_data(driver, url):
     # Get all sections once and reuse
     sections = soup.find_all('section', {'class': 'artdeco-card pv-profile-card break-words mt2'})
 
-     # Updated Education Section Logic
+     # Education Section Logic
     educations = None
     for sec in sections:
         if sec.find('div', {'id': 'education'}):
@@ -119,7 +121,7 @@ def extract_profile_data(driver, url):
     else:
         profile_data['education'] = None
 
-    # Updated experience section logic
+    # Experience section 
     experience_section = None
     sections = soup.find_all('section', {'class': 'artdeco-card pv-profile-card break-words mt2'})
 
@@ -137,4 +139,24 @@ def extract_profile_data(driver, url):
         # Remove duplicates while preserving order
         profile_data['experience'] = list(dict.fromkeys(experience_texts))
 
+    # Organizations Section Logic
+    organizations_section = None
+    for sec in sections:
+        if sec.find('div', {'id': 'organizations'}):
+            organizations_section = sec
+            break
+
+    profile_data['organizations'] = []
+    if organizations_section:
+        organization_items = organizations_section.find_all('li', {'class': 'artdeco-list__item'})
+        for item in organization_items:
+            org_name = item.find('span', {'aria-hidden': 'true'})
+            org_role = item.find('span', {'class': 't-14 t-normal'})
+            if org_name and org_role:
+                org_data = {
+                    'name': org_name.get_text(strip=True),
+                    'role': org_role.get_text(strip=True)
+                }
+                profile_data['organizations'].append(org_data)
+    
     return profile_data

@@ -1,4 +1,5 @@
 
+
 from langchain_ollama import OllamaLLM
 from langchain.prompts import ChatPromptTemplate
 from joblib import Memory
@@ -7,81 +8,59 @@ import re
 memory = Memory("/tmp/joblib_cache", verbose=0)
 
 
+insights_template = """ You are a personality analyst. Use plain text only. Do not use bold, italics, bullet points, or any special formatting. Provide meaningful content for each section. If any information is missing, write "Not available". Do not guess or hallucinate.
 
-# insights_template = (
-#     "You are a skilled personality analyst utilizing the DISC framework to evaluate professional profiles. "
-#     "Your task is to analyze the provided profile data (including professional experiences, education, and skills) and determine the individual's DISC personality type. "
-#     "The DISC types include primary types (D - Dominance, I - Influence, S - Steadiness, C - Conscientiousness) and their combinations (e.g., DC, CD, SC). Select **only one** personality type (primary or combination)."
+Profile Summary: Write a short, tailored summary of the individual's DISC type, work style, and professional strengths.
 
-#     "\n\n**Instructions:**"
-#     "\n1. Review the provided profile data: {data}."
-#     "\n2. Identify and select the single best DISC personality type that fits the individual."
-#     "\n3. Provide a descriptor (e.g., Analyzer (C), Leader (CD), Supporter (SC)) with a clear explanation of their type."
-#     "\n4. Offer actionable insights for interacting with this individual."
+DISC Personality Type: Select ONLY ONE of these DISC types based on the individual's strengths and behaviors. Make sure your description fits their traits:
 
-#     "\n\nFormat your response as follows:"
+Leader (D)  (Dominance): Bold, decisive, and goal-focused. Often takes charge and excels in fast-paced environments, driving progress with determination and energy.
 
-#     "\n\nDISC Personality Type:"
-#     "\nState the single DISC personality type (primary or combination) and describe it. For example: **Analyzer (C)**, **Leader (CD)**, or **Supporter (SC)**."
+Pioneer (Di) (Dominance/Influence) Energetic, persuasive, and visionary. Combines assertiveness with enthusiasm to propel ideas forward and inspire others.
 
-#     "\n\nProfile Summary:"
-#     "\nProvide a concise, structured overview of the individual's personality, focusing on their professional experiences, work style, and key attributes."
+Influencer (I)  (Influence): Outgoing, optimistic, and spontaneous, bringing energy and positivity to interactions. Builds a friendly, collaborative atmosphere and serves as a social connector. iD (Influence/Dominance): Extroverted and driven, pairing social charm with ambition to achieve results.
 
-#     "\n\nKey Traits:"
-#     "\nList three to five defining traits that characterize this individual's behavior or approach to work."
+Supporter (IS) (Influence/Steadiness) Empathetic, approachable, and consistent, prioritizing collaboration and harmony within teams.
 
-#     "\n\nExplanation:"
-#     "\nProvide a brief, clear explanation of why the chosen DISC personality type applies to the individual, backed by specific details from the profile data."
-# )
+Supporter (S)  (Steadiness): Reliable, empathetic, and cooperative, valuing stability and supporting group cohesion. Si (Steadiness/Influence): Warm, service-oriented, and adept at encouraging collaboration and consensus.
 
-insights_template = """
-You are a DISC personality analyst. Follow this format exactly and use plain text only. DO NOT use bold, italics, bullet points, or any special formatting. Ensure each section has meaningful content. If data is unavailable, write 'Not available'.
+Specialist (SC) (Steadiness/Conscientiousness): Detail-oriented, dependable, and analytical. Strongly favors systematic planning and thorough analysis, ensuring tasks are completed with precision and care. Their loyalty and thoughtful approach make them ideal for roles requiring meticulous planning and strict adherence to procedures. They excel in environments that prioritize accuracy and long-term reliability.
 
-DISC Personality Type:
-Primary DISC type here 
+Specialist (CS) (Conscientiousness/Steadiness): Dependable and methodical, thriving in structured environments that emphasize clear procedures and stability.
 
-Profile Summary:
-Short summary here (1-2 sentences) about the individual's DISC type, skills, and work style.
+Analyzer (C) (Conscientiousness) Precise, analytical, and dependable, emphasizing thorough research and high-quality results. Focuses on details and accuracy. 
 
-Key Traits:
-1. Trait 1: Short description
-2. Trait 2: Short description
-3. Trait 3: Short description
+Analyzer (CD) (Conscientiousness/Dominance): A blend of logical problem-solving and action-oriented drive, striving for measurable outcomes backed by careful analysis.
 
-Personality Diagram :
-When describing this diagram in your prompt to generate text for a class, you can say:
+Strategist (DC) (Dominance/Conscientiousness) Direct, analytical, and efficient, with a goal-centered approach that values structure and logical methods.
 
-"This diagram represents the DISC Personality Model, dividing individuals into four main personality types: Dominance (D), Influence (i), Steadiness (S), and Conscientiousness (C). Each quadrant includes specific personality subtypes:
+Format your answer like this example: "DISC Personality Type: Leader – D (Dominance): Decisive, results-focused, and thrives in fast-paced environments, often taking charge and prioritizing outcomes over consensus."
 
-D: Goal-oriented and decisive.
-i: Enthusiastic and persuasive.
-S: Supportive and patient.
-C: Analytical and detail-focused.
-Please generate a description for the [INSERT PERSONALITY CLASS, e.g., Conscientiousness (C)], including its traits, strengths, weaknesses, and ideal work environments."
+Personality Diagram: 
+Describe the individual’s DISC traits in one sentence using relevant traits given below: 
+1. Dominance (D): Bold and results-driven. 
+2. Influence (i): Outgoing and charismatic. 
+3. Steadiness (S): Patient and dependable. 
+4. Conscientiousness (C): Detail-oriented and logical.
 
-Do's:
-1. Provide one actionable suggestion for effectively working with this individual.
-2. Provide another actionable suggestion for effectively working with this individual.
+Key Traits: Trait 1: Short description. Trait 2: Short description. Trait 3: Short description.
 
-Don'ts:
-1. Mention one potential pitfall to avoid when interacting with this individual.
-2. Mention another potential pitfall to avoid when interacting with this individual.
-"""
+Do's: Provide two actionable suggestions that the interviewee can implement during the interview with this person to effectively showcase their strengths and personality.
 
+Don'ts: Mention two behaviors or mistakes the interviewee should avoid during the interview with this person to maintain a positive impression.
 
-
+ """
 
 
 
 model = OllamaLLM(model="llama3.1:latest")
-@memory.cache
+# @memory.cache
 def generate_llm_insights(profile_data):
     if not profile_data:
         return "No data provided for generating insights."
 
-    # Convert profile_data dictionary into a readable string for the LLM
     profile_data_str = "\n".join(
-        f"{key.capitalize()}: {value}" for key, value in profile_data.items() if value
+        f"{key.capitalize()}: {value.strip()}" for key, value in profile_data.items() if value and isinstance(value, str) 
     )
 
     prompt_template = ChatPromptTemplate.from_template("{insights_template}\n\n{data}")
@@ -92,52 +71,126 @@ def generate_llm_insights(profile_data):
         "insights_template": insights_template,
         "data": profile_data_str,
     })
-
- 
-
     print("Generated insights for the provided profile data")
     return response
+
+
+# def parse_llm_response(cleaned_insights):
+#     structured_response = {
+#         "DISC_Personality_Type": "",
+#         "Profile_Summary": "",
+#         "Personality_Diagram": "",
+#         "Key_Traits": [],
+#         "Dos": [],
+#         "Donts": []
+#     }
+
+#     try:
+#         # Split by lines and process one by one to ensure proper handling.
+#         lines = cleaned_insights.split("\n")
+#         current_section = None
+
+#         for line in lines:
+#             line = line.strip()
+#             if not line:
+#                 continue
+
+#             # Identify section headers
+#             if line.startswith("DISC Personality Type:"):
+#                 current_section = "DISC_Personality_Type"
+#                 # Extract content after the colon
+#                 structured_response[current_section] = line.split(":", 1)[1].strip()
+#                 continue
+
+#             if line.startswith("Profile Summary:"):
+#                 current_section = "Profile_Summary"
+#                 continue
+
+#             if line.startswith("Personality Diagram :"):
+#                 current_section = "Personality_Diagram"
+#                 continue
+
+#             if line.startswith("Key Traits:"):
+#                 current_section = "Key_Traits"
+#                 continue
+
+#             if line.startswith("Do's:"):
+#                 current_section = "Dos"
+#                 continue
+
+#             if line.startswith("Don'ts:"):
+#                 current_section = "Donts"
+#                 continue
+
+#             # Append content to the current section
+#             if current_section == "DISC_Personality_Type":
+#                 # Add extra content if it appears on the next lines
+#                 structured_response["DISC_Personality_Type"] += " " + line
+#             elif current_section == "Profile_Summary":
+#                 structured_response["Profile_Summary"] += " " + line
+#             elif current_section == "Personality_Diagram":
+#                 structured_response["Personality_Diagram"] += " " + line
+#             elif current_section == "Key_Traits":
+#                 # Exclude any lines related to Personality Diagram in Key Traits
+#                 if "Personality Diagram" not in line:
+#                     structured_response["Key_Traits"].append(line)
+#             elif current_section == "Dos":
+#                 structured_response["Dos"].append(line)
+#             elif current_section == "Donts":
+#                 structured_response["Donts"].append(line)
+
+#         # Strip any extra spaces
+#         structured_response["DISC_Personality_Type"] = structured_response["DISC_Personality_Type"].strip()
+#         structured_response["Profile_Summary"] = structured_response["Profile_Summary"].strip()
+#         structured_response["Personality_Diagram"] = structured_response["Personality_Diagram"].strip()
+
+#     except Exception as e:
+#         print(f"Error parsing insights: {e}")
+
+#     return structured_response
+
+
 
 def parse_llm_response(cleaned_insights):
     structured_response = {
         "DISC_Personality_Type": "",
         "Profile_Summary": "",
-        "Key_Traits": [],
         "Personality_Diagram": "",
+        "Key_Traits": [],
         "Dos": [],
         "Donts": []
     }
 
     try:
-        lines = cleaned_insights.split("\n")
-        current_section = None
+        # Define regex patterns for each section
+        section_patterns = {
+            "DISC_Personality_Type": r"DISC Personality Type:([\s\S]*?)(?=Profile Summary:|Personality Diagram:|Key Traits:|Do's:|Don'ts:|$)",
+            "Profile_Summary": r"Profile Summary:([\s\S]*?)(?=DISC Personality Type:|Personality Diagram:|Key Traits:|Do's:|Don'ts:|$)",
+            "Personality_Diagram": r"Personality Diagram[\s:]*([\s\S]*?)(?=DISC Personality Type:|Profile Summary:|Key Traits:|Do's:|Don'ts:|$)",
+            "Key_Traits": r"Key Traits:([\s\S]*?)(?=DISC Personality Type:|Profile Summary:|Personality Diagram:|Do's:|Don'ts:|$)",
+            "Dos": r"Do's:([\s\S]*?)(?=DISC Personality Type:|Profile Summary:|Personality Diagram:|Key Traits:|Don'ts:|$)",
+            "Donts": r"Don'ts:([\s\S]*?)(?=DISC Personality Type:|Profile Summary:|Personality Diagram:|Key Traits:|Do's:|$)"
+        }
 
-        for line in lines:
-            line = line.strip()
-
-            if "DISC Personality Type:" in line:
-                current_section = "DISC_Personality_Type"
-                structured_response[current_section] = line.split(":", 1)[1].strip()
-            elif "Profile Summary:" in line:
-                current_section = "Profile_Summary"
-                structured_response[current_section] = ""
-            elif "Key Traits:" in line:
-                current_section = "Key_Traits"
-                structured_response[current_section] = []
-            elif "Personality Diagram:" in line:
-                current_section = "Personality_Diagram"
-                structured_response[current_section] = ""
-            elif "Do's:" in line:
-                current_section = "Dos"
-                structured_response[current_section] = []
-            elif "Don'ts:" in line:
-                current_section = "Donts"
-                structured_response[current_section] = []
-            elif current_section:
-                if isinstance(structured_response[current_section], list):
-                    structured_response[current_section].append(line)
+        # Extract each section using regex
+        for key, pattern in section_patterns.items():
+            match = re.search(pattern, cleaned_insights, re.IGNORECASE)
+            if match:
+                content = match.group(1).strip()
+                # Split multiline content into a list for these sections
+                if key in {"Key_Traits", "Dos", "Donts"}:
+                    structured_response[key] = [
+                        line.strip() for line in content.split("\n") if line.strip()
+                    ]
                 else:
-                    structured_response[current_section] += f" {line}".strip()
+                    structured_response[key] = content
+
+        # Post-process for missing or malformed sections
+        for key, value in structured_response.items():
+            if not value:
+                structured_response[key] = "Not available" if isinstance(value, str) else []
+
     except Exception as e:
         print(f"Error parsing insights: {e}")
+
     return structured_response

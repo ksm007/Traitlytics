@@ -135,6 +135,8 @@ button:hover {
     color: #444444;
     margin-top: 1rem;
     animation: fadeIn 1.5s ease;
+    overflow-y: auto;
+    word-wrap: break-word;
 }
 
 
@@ -142,6 +144,8 @@ button:hover {
     line-height: 1.8;
     color: #444444;
     margin-top: 1rem;
+    overflow-y: auto;
+    word-wrap: break-word;
 }
 
 #output h2 {
@@ -157,6 +161,7 @@ button:hover {
     font-size: 0.95rem;
     color: #555555;
     margin: 0.3rem 0;
+    
 }
 
 /* Scrollbar Styling */
