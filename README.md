@@ -12,10 +12,8 @@ Ever wondered what kind of personality your hiring manager has? Traitlytic provi
 
 ## Technologies Used
 - **Python** (Flask, BeautifulSoup, Selenium)
-- **Meta LLaMA 3.3 7B** (via Ollama API)
-- **Reinforcement Learning** (RLHF for optimization)
+- **Meta LLaMA 3.1 7B** (via Ollama API)
 - **Puppeteer** (Automated scraping and session handling)
-- **FastAPI** (for API-based personality predictions)
 
 
 
