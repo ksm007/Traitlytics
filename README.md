@@ -22,5 +22,7 @@ This project is licensed under the [Apache License 2.0](LICENSE).
 
 ## Author
 [**Kuntal Thakur**](https://github.com/Kuntalthakur01)
+[**Farhat Shaikh**](https://github.com/Faruu18)
+
 
 
