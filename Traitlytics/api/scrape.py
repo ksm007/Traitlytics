@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-SESSION_ID = 'AQEDATD5GXwCQ8ZyAAABlPwXAzoAAAGVICOHOlYAkt7Cag86Eefza3Uv8VCyjHgIM9RuwWN69piU67pYuxS2z1ZIkpmCuW_bIveJ7snCSJVvNs2IJXZoqeaONlViMAJ2acQJHu3ugweLcIeqLpl91Ig4'
+SESSION_ID = 'AQEDATD5GXwFXBxTAAABlRwNAtsAAAGVQBmG200ADvYI-_ruZKaXVW9GrC9CbBHHfXaPN7IzYC_DADMQavxxUAITIKUGyEpEv8cNpOiaW2quo0db8vtOPFiv46qq4sCbCkKZCnRlBSO9BPaNV3J1lDtQ'
 
 def scrape_website(url):
     driver = get_driver()

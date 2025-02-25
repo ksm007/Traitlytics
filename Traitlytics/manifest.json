@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "LinkedIn Personality Predictor",
+    "name": "Traitlytics",
     "version": "1.0",
     "description": "Predict personality traits based on LinkedIn profiles.",
     "permissions": ["activeTab", "storage", "scripting", "tabs"],
@@ -10,11 +10,11 @@
       "service_worker": "background.js"
     },
     "action": {
-      "default_popup": "popup.html",
+      "default_popup": "ui/popup.html",
       "default_icon": {
-        "16": "icons/icon16.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
+        "16": "assets/icon16.png",
+        "48": "assets/icon48.png",
+        "128": "assets/icon128.png"
       }
     }
   }
