@@ -56,18 +56,17 @@ user_agents = [
 
 def get_driver():
     options = webdriver.ChromeOptions()
+    
+    # Set the binary location if Chrome/Chromium isn't on PATH.
+    # Update this path according to your environment.
+    options.binary_location = "/usr/bin/chromium-browser"
+    
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
-    options.add_argument("--disable-dev-shm-usage")  # Helps avoid /dev/shm issues
-    options.add_argument("--headless")  # Ensure headless mode
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--headless")  # Run in headless mode
 
-    # Optionally, if your environment doesn’t include chromedriver in PATH,
-    # you can either specify the executable_path explicitly:
-    # driver = webdriver.Chrome(executable_path="/path/to/chromedriver", options=options)
-    # Or use a tool like chromedriver_autoinstaller:
-    import chromedriver_autoinstaller
-    chromedriver_autoinstaller.install()
     driver = webdriver.Chrome(options=options)
     return driver
 
