@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-SESSION_ID = 'AQEDATD5GXwFXBxTAAABlRwNAtsAAAGVQBmG200ADvYI-_ruZKaXVW9GrC9CbBHHfXaPN7IzYC_DADMQavxxUAITIKUGyEpEv8cNpOiaW2quo0db8vtOPFiv46qq4sCbCkKZCnRlBSO9BPaNV3J1lDtQ'
+SESSION_ID = 'AQEDASfeZzgB6xg4AAABlNLoLqQAAAGWHhI-61YACANdqiMr2-2_ik2F0NNGAJAmcQGEhH_kZh2jy8_xG9vBSt0Njgx0EkKH7hhVY4jbToXsnOrVfP2L-lA9BoassbXtYdevo-OWfnowN9RWN7hvdG_l'
 
 def scrape_website(url):
     driver = get_driver()
@@ -64,8 +64,9 @@ def get_driver():
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--headless")  # Run in headless mode
+
+    options.add_argument("--headless")
+
 
     driver = webdriver.Chrome(options=options)
     return driver
