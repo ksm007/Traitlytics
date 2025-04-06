@@ -1,5 +1,7 @@
-chromium-browser
 libnss3
 libgconf-2-4
 libxi6
 libxss1
+chromium
+chromium-driver
+xvfb
