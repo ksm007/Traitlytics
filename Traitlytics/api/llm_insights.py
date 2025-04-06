@@ -2,6 +2,8 @@
 
 from langchain_ollama import OllamaLLM
 from langchain.prompts import ChatPromptTemplate
+from openai import OpenAI
+
 from joblib import Memory
 import re
 
@@ -51,9 +53,10 @@ Don'ts: Mention two behaviors or mistakes the interviewee should avoid during th
 
  """
 
-
-
-model = OllamaLLM(model="llama3.1:latest")
+client = OpenAI(
+    api_key="aa224b7f-5aa6-4020-8425-a002b8ced89a",
+    base_url="https://api.llmapi.com"
+)
 # @memory.cache
 def generate_llm_insights(profile_data):
     if not profile_data:
@@ -62,17 +65,22 @@ def generate_llm_insights(profile_data):
     profile_data_str = "\n".join(
         f"{key.capitalize()}: {value.strip()}" for key, value in profile_data.items() if value and isinstance(value, str) 
     )
-
-    prompt_template = ChatPromptTemplate.from_template("{insights_template}\n\n{data}")
-    chain = prompt_template | model
-
+    full_prompt = f"{insights_template}\n\n{profile_data_str}"
+    
     # Generate insights with correct placeholders
-    response = chain.invoke({
-        "insights_template": insights_template,
-        "data": profile_data_str,
-    })
+    response = client.chat.completions.create(
+        model="llama3.1-8b",
+        messages=[
+            {"role": "system", "content": "You are a personality analyst that generates insights."},
+            {"role": "user", "content": full_prompt}
+        ],
+        temperature=0.5,
+        max_tokens=3000
+    )
+    
+    generated_text = response.choices[0].message.content
     print("Generated insights for the provided profile data")
-    return response
+    return generated_text
 
 
 
