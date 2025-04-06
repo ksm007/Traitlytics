@@ -54,22 +54,27 @@ user_agents = [
     "Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.2 Mobile/15E148 Safari/604.1"
 ]
 
+from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-def get_driver():
-    options = webdriver.ChromeOptions()
-    
-    # Remove this line as it's causing issues
-    # options.binary_location = "/usr/bin/chromium-browser"
-    
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--headless")
+from selenium.webdriver.chrome.options import Options
 
-    # Use WebDriver Manager to automatically handle driver installation
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
+def get_driver():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    
+    # For Streamlit Cloud specifically
+    try:
+        # Try using webdriver_manager to handle driver installation
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+    except:
+        # Fallback for Streamlit Cloud
+        driver = webdriver.Chrome(options=chrome_options)
+    
     return driver
 
 def use_session_cookie(driver, session_id):
